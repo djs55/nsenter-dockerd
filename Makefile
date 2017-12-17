@@ -1,2 +1,2 @@
 default:
-	docker build -t ebriney/nsenter-dockerd .
+	docker build -t enter-test .

@@ -9,8 +9,8 @@
 
 extern char **environ;
 
-static void enter_ns(pid_t pid);
-static pid_t dockerd_pid();
+void enter_ns(pid_t pid);
+pid_t dockerd_pid();
 
 int main(int argc, char **argv) {
 	char *shell = "/bin/sh";
@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
 	exit(0);	
 }
 
-static void enter_ns(pid_t pid)
+void enter_ns(pid_t pid)
 {
 	char buffer[512];
 
@@ -73,17 +73,16 @@ static void enter_ns(pid_t pid)
 	}
 }
 
-static pid_t dockerd_pid()
+pid_t dockerd_pid()
 {
 	const int LEN = 64;
 	char buffer[LEN];
 
-//	FILE *pidofcmd = popen("pidof dockerd", "r");
-    FILE *pidofcmd = fopen("/var/run/docker.pid", "r");
+	FILE *pidofcmd = popen("pidof run-test", "r");
 	fgets(buffer, LEN, pidofcmd);
 	pid_t pid = strtoul(buffer, NULL, 10);
-//	pclose(pidofcmd);
-	fclose(pidofcmd);
+	pclose(pidofcmd);
+	printf("pid: %d", pid);
 	
 	return pid;
 }
