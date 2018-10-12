@@ -79,7 +79,11 @@ static pid_t dockerd_pid()
 	char buffer[LEN];
 
 //	FILE *pidofcmd = popen("pidof dockerd", "r");
-    FILE *pidofcmd = fopen("/var/run/docker.pid", "r");
+    FILE *pidofcmd = fopen("/containers/services/docker/rootfs/var/run/docker.pid", "r");
+	if (pidofcmd == NULL) {
+		fprintf(stderr, "Cannot find /var/run/docker.pid in the docker container\n");
+		exit(1);
+	}
 	fgets(buffer, LEN, pidofcmd);
 	pid_t pid = strtoul(buffer, NULL, 10);
 //	pclose(pidofcmd);
